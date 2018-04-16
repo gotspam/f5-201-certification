@@ -1,33 +1,91 @@
-Lab – Power-on the |bip| Appliance
-----------------------------------
+Lab – Pool Member and Virtual Servers
+-------------------------------------
 
-.. TODO:: Needs lab description
-
-In this lab we will connect the power cord and turn on the |bip| Appliance.
-
-Task – Connect the Power Cord
+Task – Create a new monitor
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. TODO:: Needs task description
+In this task, you will determine the effects of monitors on the status of pools members.
 
-In this task you will connect the appropriate power cord.
+#. Create **mysql** monitor for testing.
 
-.. IMPORTANT:: Be sure to use the appropriate power cord for your region.
-   Follow all applicable electrical guidelines and codes.
+   - Go to **Local Traffic > Monitors** and select **Create**.
 
-Follow these steps to complete this task:
+   .. list-table::
+      :widths: 60 60
+      :header-rows: 0
 
-#. Connect one end to the |bip|
-#. Connect the other end to the power source
+      * - **Name**
+        - mysql\_monitor
+      * - **Parent Monitor**
+        - mysql
+      * - **Interval**
+        - 15
+      * - **Timeout**
+        - 46
 
-Task – Turn on the |bip| Appliance
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. TODO:: Needs task description
+Task – Effects of Monitors on Members, Pools and Virtual Servers
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In this task you turn on the |bip| Appliance.
+#. Go to **Local Traffic -> Pools -> www\_pool** and assign **mysql\_monitor** to the pool.
 
-Follow these steps to complete this task:
+#. Observe Availability Status of **www\_pool.** The pool status momentarily changes to **Unknown**.
 
-#. Push the 'On' button
-#. Verify the red F5 ball lights up
+   .. ATTENTION::
+      Q1. Since the **mysql\_monitor** will fail, how long will it take to mark the pool offline?
+
+#. Go to **Local Traffic > Pool > www\_pool** and then **Member** from the top bar and open member 10.1.20.13:80 and note the status of the monitors.
+
+#. Open **Local Traffic -> Network Map -> Show Map**
+
+   .. ATTENTION::
+      Q2. What is the icon and status of **www\_vs**?
+
+      Q3. What is the icon and status of **www\_pool**?
+
+      Q4. What is the icon and status of the **www\_pool** members?
+
+      Q5. How does the status of the pool configuration effect the virtual server status?
+
+#. Clear the virtual server statistics.
+
+#. Browse to **http://10.1.10.100** and note the browser results, statistics and tcpdump.
+
+#. Disable **www\_vs** and clear the statistics and ping the virtual server.
+
+   .. ATTENTION::
+      Q6. What is the icon and status of **www\_vs**?
+
+#. Browse to **http://10.1.10.100** and note the browser results, statistics and tcpdump.
+
+   .. ATTENTION::
+      Q7. Did traffic counters increment for **www\_vs**?
+
+      Q8. What is the difference in the tcpdumps between Offline (Disabled) vs Offliine (Enabled)?
+
+   *Make sure all virtual servers are Enabled before continuing.*
+
+Task – More on status and member specific monitors
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#. Go to **Local Traffic > Pool > www\_pool** and then **Member** from the top bar and open member **10.1.20.13:80.** Enable the **Configuration: Advanced** menus.
+
+   .. ATTENTION::
+      Q1. What is the status of the Pool Member and the monitors assigned to it?
+
+#. In **Health Monitors** select **Member Specific** and assign the **http** monitor and **Update.**
+
+#. Go to the **Network Map**.
+
+   .. ATTENTION::
+      Q2. What is the status of **www\_vs**, **www\_pool** and the pool members? Why?
+
+#. Browse to **http://10.1.10.100** and note results of browser and tcpdump.
+
+   .. ATTENTION::
+      Q3. Did the site work?
+
+      Q4. Which **www\_pool** members was traffic sent to?
+
+   .. IMPORTANT::
+      After completion of this task remove mysql\_monitor from the www\_pool health monitors.

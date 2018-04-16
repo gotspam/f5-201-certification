@@ -1,49 +1,84 @@
-Lab – Download the |bip| |ve| Image
------------------------------------
+Lab – Lab Preparation and Packet Processing
+-------------------------------------------
 
-.. TODO:: Needs lab description
+Task – BIG-IP VE System Configuration
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This lab will teach you how to download the |bip| |ve| image to your system.
+Access your BIG-IP and verify it is configured properly.
 
-Task – Open a Web Browser
-~~~~~~~~~~~~~~~~~~~~~~~~~
+#. Open a new Web browser and access https://10.1.1.245.  Log into the BIG-IP VE system using the following credentials:
+   Username: ``admin``
+   Password: ``admin``
 
-.. TODO:: Needs task description
+#. Check the upper left-hand corner and ensure you are on the active device the status should be **ONLINE (ACTIVE)**.  Most deployments are active-standby and either device could be the active device.
 
-In this task you will open a web browser and navigate to the |f5| Downloads
-site.
+#. On the **System >> Resource Provisioning** page ensure **Local Traffic (LTM)** and **Application Visibility and Reporting (AVR)** modules are provisioned.
 
-.. NOTE:: An account is required to download software.  You can create one at
-   https://login.f5.com/resource/registerEmail.jsp
+#. Go to Local Traffic >> Virtual Servers and verify your virtual server states.  They should match the graphic.
 
-Follow these steps to complete this task:
+   .. image:: /_static/image003.png
 
-#. Open your web browser
-#. Navigate to https://downloads.f5.com
-#. Login with your username and password.
-#. After logging in you should see the following window:
+   .. NOTE:: This BIG-IP has been pre-configured and the purple_vs virtual server is down on purpose.
 
-   |image1|
+Task – Open BIG-IP TMSH and TCPDump session
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Task – Download the Image
-~~~~~~~~~~~~~~~~~~~~~~~~~
+In this task, you will open two SSH sessions to the BIG-IP.  One for TMSH commands and the other for tcpdump of the client-side network.
 
-.. TODO:: Needs task description
+#. Open command/terminal window (window1) from the shortcut bar at the bottom of the jumpbox.
 
-In this task we will download the |f5| |bip| |ve| image to your system
+   - **ssh root@10.1.1.245**
+     Password: ``default``
 
-Follow these steps to complete this task:
+#. Use tcpdump to monitor traffic from the client (10.1.10.51) destined to ftp_vs (10.1.10.100)
 
-#. Click the 'Find a Download' button.
+   - **tcpdump –nni client_vlan host 10.1.10.51 and 10.1.10.100**
 
-   .. image:: /_static/image002.png
+#. Open command/terminal window (window2).
 
-#. Click the link that contains the |bip| TMOS software version you would like
-   to download.
+   - **ssh root@10.1.1.245**
 
-   .. IMPORTANT:: Be sure to click a link that has "\ |ve|" in the name
+#. Use tmsh to display connection table, at the Linux command prompt type:
 
-#. Find the image appropriate for your hypervisor
-#. Download the image and save it to you local system
+   - **tmsh**
 
-.. |image1| image:: /_static/image001.png
+#. At the TMOS prompt **(tmos)#**
+
+   - **show sys connection**
+
+.. ATTENTION::
+   Q1. Do you see any connections from the jumpbox 10.1.1.51 to 10.1.1.245:22?
+
+   Q2. Why are the ssh management sessions not displayed in connection table?
+
+Task – Establish ftp connection
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In this task you will open a third terminal window and establish an FTP session through the ftp_vs virtual server.  With the connection remaining open you will view the results in window1 (tcpdump) and window2 (tmsh).
+
+#. Open a third terminal window on the Xubuntu  client (window3).
+
+   - **ftp 10.1.10.100**
+
+   In window1 you should see something similar to the tcpdump captured below.
+
+   .. image:: /_static/image004.png
+
+.. ATTENTION::
+   Q1. In the tcpdump above, what is client IP address and port and the server IP address port?
+
+#. In window2 (tmsh) run the show sys conn again, but strain out the noise of other connections (mirrored and selfIP) by just looking at connections from your jumpbox.
+
+   - **show sys conn cs-client-addr 10.1.10.51**
+
+   The connection table on window2 will show the client-side and server-side connection similar to below
+
+   .. image:: /_static/image005.png
+
+.. ATTENTION::
+   Q2.  What is source ip and port as seen by ftp server in the example above?
+
+   Q3. What happened to the original client IP address and where did 10.1.20.249 come from?
+
+.. HINT::
+   You will have to review the configuration of ftp_vs to determine the answer to this question.
