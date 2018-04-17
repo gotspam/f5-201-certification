@@ -5,10 +5,10 @@
 # ------------
 #
 # REQUIRED: Your class/lab name
-classname = "Getting Started with F5 BIG-IP"
+classname = "F5 201 Certification BIG-IP Administration"
 
 # OPTIONAL: The URL to the GitHub Repository for this class
-github_repo = "https://github.com/f5devcentral/your-class-repo"
+github_repo = "https://github.com/gotspam/f5-201-certification"
 
 # OPTIONAL: Google Analytics
 # googleanalytics_id = 'UA-85156643-4'
@@ -256,6 +256,3 @@ texinfo_documents = [
      author, classname, classname,
      'Training'),
 ]
-
-
-

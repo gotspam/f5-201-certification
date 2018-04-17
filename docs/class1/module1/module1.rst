@@ -1,10 +1,13 @@
-Module – Installing a BIG-IP Virtual Edition
-=============================================
+Module – Packet Processing and Virtual Servers
+==============================================
 
-.. TODO:: Needs module description
+**Objective:**
 
-In this module you will learn how to install a |f5| |bip| |ve| into your
-environment.
+- Objective 1.01
+
+  - Given a connectivity-troubleshooting situation, consider the packet and virtual server processing order.
+
+  Estimated completion time: 30 minutes
 
 .. toctree::
    :maxdepth: 1

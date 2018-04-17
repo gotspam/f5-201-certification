@@ -1,48 +1,78 @@
-Lab – Install a |f5| |bip| Appliance
-------------------------------------
+Lab – Virtual Sever Status
+--------------------------
 
-.. TODO:: Needs lab description
+Task – Test Disabled Virtual Servers
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In this lab we will unpack and install the |bip| Appliance into a rack in your
-datacenter.
+In this task, you will disable and enable various virtual servers and note the behavior.
 
-Task – Unpack the |bip| Appliance
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#. Disable **www\_vs** from the **Virtual Server List** or from within the **www\_vs** GUI interface.
 
-.. TODO:: Needs task description
+#. Open **Local** **Traffic > Virtual Servers** and hover over status icons.
 
-In this task you will remove the |bip| Appliance from it's packaging.
+#. From window2 (TMSH) type: **show ltm virtual or show ltm virtual www\_vs**
 
-Follow these steps to complete this task:
+   .. ATTENTION::
+      Q1. What is the Availability of **www\_vs**? What is the State?
 
-#. Open the box with an extremely sharp knife or cutter
+      Q2. What symbol is used to represent **www\_vs** status?
 
-   .. DANGER:: Knives are sharp and can cut you.  Please be careful.
+      Q3. Would you expect browsing to **http://10.1.10.100** to work?
 
-      |knivessharp|
+      Q4. Can you ping the virtual IP?
 
-#. Carefully remove the |bip| from it's packaging
-#. Set it down on a stable surface
+#. Clear virtual server stats and browse to **http://10.1.10.100**
 
-Task – Install the |bip| Appliance in a Datacenter Rack
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#. Observe the tcpdump (window1) and connection statistics in the Virtual Server statics GUI interface.
 
-.. TODO:: Needs task description
+   .. ATTENTION::
+      Q5. Did the site work? What did the tcpdump show?
 
-In this task you will install the |bip| Appliance into a Rack.  You will need
-the following tools:
+      Q6. Did statistics counters for any virtual increment?
 
-- Phillips Screwdriver
-- Hammer
-- Crowbar
+      Q7. Why do you think the **wildcard\_vs** didn’t pick up the packets?
 
-.. CAUTION:: Appliances can be heavy.  Please follow all applicable safety
-   guidelines.
+#. Disable **wildcard\_vs** and note the State and Availability of the virtual servers.
 
-Follow these steps to complete this task:
+   .. ATTENTION::
+      Q8. What symbol is used to represent **wildcard\_vs**? Why is symbol a square?
 
-#. Install the rackmount rails onto the appliance using the included hardware
-#. Lift the appliance into place
-#. Complete installation by using your tools to secure the appliance.
+      Q9. What is the Reason given for current state?
 
-.. |knivessharp| image:: http://theinkkitchen.com/wp-content/uploads/2014/08/Screenshot-2014-07-30-12.22.44.png
+#. Establish ftp connection to 10.1.10.100 and ensure successful login.
+
+#. Disable **ftp\_vs**.
+
+   .. ATTENTION::
+      Q10. Does ftp session still work? Why?
+
+#. Open another window and establish ftp connection to 10.1.10.100.
+
+   .. ATTENTION::
+      Q11. Did new ftp session establish connection? Why not?
+
+.. IMPORTANT::
+   Make sure all virtual servers are Enabled before continuing.*
+
+Task – Virtual Server Connection Limits and Status
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In this task, you will set the connection limit for the FTP virtual server to 1 and note the status and behavior of different connection scenarios.
+
+#. Modify **ftp\_vs** for connection limit of 1. The **Connection Limit** option can be found under the **Advanced** virtual server menus.
+
+#. Establish ftp connection to **10.1.10.100** and hold the logon open.
+
+   .. ATTENTION::
+      Q1. Does FTP session work?
+
+      Q2. What is the virtual server symbol and status of **ftp\_vs**?
+
+#. Open another window and establish a second ftp connection to 10.1.10.100.
+
+   .. ATTENTION::
+      Q3. Did new ftp session establish connection? Why not?
+
+      Q4. Did tcpdump capture connection reset?
+
+      Q5. Quit all FTP sessions and note **ftp\_vs** status.
